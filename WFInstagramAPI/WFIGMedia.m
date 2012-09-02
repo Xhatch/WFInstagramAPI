@@ -15,10 +15,11 @@
 
 @implementation WFIGMedia {
   NSMutableArray *_comments;
+  NSMutableArray *_likeUsers;
 }
 
-@synthesize instagramId, imageURL, thumbnailURL, lowResolutionURL, instagramURL,
-  createdTime, caption, commentsData, tags, userData, locationData;
+@synthesize instagramId, imageURL, thumbnailURL, lowResolutionURL, instagramURL, createdTime,
+  caption, commentsCount, commentsData, likesCount, likesData, tags, userData, locationData;
 
 #pragma mark - class methods
 
@@ -68,7 +69,11 @@
       self.caption = captionInfo;
     }
     
+    self.commentsCount = [[[json objectForKey:@"comments"] objectForKey:@"count"] intValue];
     self.commentsData = [[json objectForKey:@"comments"] objectForKey:@"data"];
+
+    self.likesCount = [[[json objectForKey:@"likes"] objectForKey:@"count"] intValue];
+    self.likesData = [[json objectForKey:@"likes"] objectForKey:@"data"];
     
     self.tags = [json objectForKey:@"tags"];
     self.userData = [json objectForKey:@"user"];
@@ -90,6 +95,17 @@
     _comments = [WFIGComment commentsWithJSON:self.commentsData];
   }
   return _comments;
+}
+
+- (NSMutableArray*) likeUsers {
+  if (nil == _likeUsers) {
+    NSMutableArray *likeUsers = [[NSMutableArray alloc] init];
+    for (NSDictionary *userJson in self.likesData) {
+      [likeUsers addObject:[[WFIGUser alloc] initWithJSONFragment:userJson]];
+    }
+    _likeUsers = likeUsers;
+  }
+  return _likeUsers;
 }
 
 
