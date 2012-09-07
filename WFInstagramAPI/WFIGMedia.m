@@ -13,8 +13,14 @@
 #import "WFIGComment.h"
 #import "WFIGResponse.h"
 
+@interface WFIGMedia()
+@property (readwrite, nonatomic) int commentsCount;
+@property (readwrite, nonatomic) int likesCount;
+@end
+
 @implementation WFIGMedia {
   NSMutableArray *_comments;
+  BOOL _hasAllComments;
   NSMutableArray *_likeUsers;
 }
 
@@ -43,6 +49,7 @@
 
 - (id) init {
   if ((self = [super init])) {
+    _hasAllComments = NO;
   }
   return self;
 }
@@ -95,6 +102,33 @@
     _comments = [WFIGComment commentsWithJSON:self.commentsData];
   }
   return _comments;
+}
+
+- (BOOL) hasAllComments {
+  if ([[self comments] count] == [self commentsCount]) _hasAllComments = YES;
+  return _hasAllComments;
+}
+
+- (void) loadAllCommentsWithCompletion:(void (^)(NSError *error))completion
+{
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    NSString *endpoint = [NSString stringWithFormat:@"/media/%@/comments", self.instagramId];
+    WFIGResponse *response = [WFInstagramAPI get:endpoint];
+
+    dispatch_async( dispatch_get_main_queue(), ^{
+      if ([response isSuccess]) {
+        @synchronized(self) {
+          _comments = [WFIGComment commentsWithJSON:[[response parsedBody] objectForKey:@"data"]];
+          self.commentsCount = [[self comments] count];
+        }
+      } else {
+        WFIGDLOG(@"response error: %@", [response error]);
+        WFIGDLOG(@"response body: %@", [response parsedBody]);
+      }
+  
+      completion([response error]);
+    });
+  });
 }
 
 - (NSMutableArray*) likeUsers {

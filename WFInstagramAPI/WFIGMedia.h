@@ -20,9 +20,9 @@ typedef void (^WFIGMediaImageCallback)(WFIGMedia *media, UIImage *image);
 @property (strong, nonatomic) NSString *instagramURL;  // web url
 @property (strong, nonatomic) NSDate *createdTime;
 @property (strong, nonatomic) NSString *caption;
-@property (nonatomic) int commentsCount;
+@property (readonly, nonatomic) int commentsCount;
 @property (strong, nonatomic) NSArray *commentsData; // raw JSON comment data
-@property (nonatomic) int likesCount;
+@property (readonly, nonatomic) int likesCount;
 @property (strong, nonatomic) NSArray *likesData; // raw JSON like data
 @property (strong, nonatomic) NSMutableArray *tags; // array of strings
 @property (strong, nonatomic) NSDictionary *userData;
@@ -45,8 +45,24 @@ typedef void (^WFIGMediaImageCallback)(WFIGMedia *media, UIImage *image);
 /**
  * array of WFIGComment instances, initially
  * generated from -commentsData JSON
+ * Note that this method may only return 8 comments if the media has more
+ * than 8 comments and this object was created from one of the media
+ * endpoints (the media endpoints will only return 8 comments). If you need
+ * all comments, you should first call 'loadAllCommentsWithCompletion:'
  */
 - (NSMutableArray*) comments;
+
+/**
+ * returns YES if all comments have been loaded. The 'comments' method may
+ * return less comments than 'commentsCount', because the media endpoints
+ * only return 8 comments
+ */
+- (BOOL) hasAllComments;
+
+/**
+ * calls the comments endpoint to load all the comments for this media.
+ */
+- (void) loadAllCommentsWithCompletion:(void (^)(NSError *error))completion;
 
 /**
  * array of WFIGUser instances, initially
