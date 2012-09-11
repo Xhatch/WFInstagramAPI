@@ -9,6 +9,7 @@
 @class WFIGMedia, WFIGUser, WFIGMediaCollection;
 
 typedef void (^WFIGMediaImageCallback)(WFIGMedia *media, UIImage *image);
+typedef void (^WFIGMediaCommentsCallback)(WFIGMedia *media, NSArray *comments, NSError *error);
 
 @interface WFIGMedia : NSObject {
 }
@@ -60,9 +61,10 @@ typedef void (^WFIGMediaImageCallback)(WFIGMedia *media, UIImage *image);
 - (BOOL) hasAllComments;
 
 /**
- * calls the comments endpoint to load all the comments for this media.
+ * Loads all comments asynchronously on a background thread, and calls the
+ * completion block on the main thread when the comments are loaded.
  */
-- (void) loadAllCommentsWithCompletion:(void (^)(NSError *error))completion;
+- (void) allCommentsWithCompletionBlock:(WFIGMediaCommentsCallback)completionBlock;
 
 /**
  * array of WFIGUser instances, initially

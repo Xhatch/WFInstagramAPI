@@ -109,8 +109,15 @@
   return _hasAllComments;
 }
 
-- (void) loadAllCommentsWithCompletion:(void (^)(NSError *error))completion
+- (void) allCommentsWithCompletionBlock:(WFIGMediaCommentsCallback)completionBlock
 {
+  __block WFIGMedia *blockSelf = self;
+
+  if ([self hasAllComments]) {
+    completionBlock(blockSelf, _comments, nil);
+    return;
+  }
+
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSString *endpoint = [NSString stringWithFormat:@"/media/%@/comments", self.instagramId];
     WFIGResponse *response = [WFInstagramAPI get:endpoint];
@@ -126,7 +133,7 @@
         WFIGDLOG(@"response body: %@", [response parsedBody]);
       }
   
-      completion([response error]);
+      completionBlock(blockSelf, _comments, [response error]);
     });
   });
 }
