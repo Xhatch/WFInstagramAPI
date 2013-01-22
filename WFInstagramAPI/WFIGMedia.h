@@ -30,6 +30,7 @@ typedef void (^WFIGMediaCommentsCallback)(WFIGMedia *media, NSArray *comments, N
 @property (strong, nonatomic) NSDictionary *locationData;
 
 + (WFIGMediaCollection*) popularMediaWithError:(NSError* __autoreleasing*)error;
++ (WFIGMediaCollection*) mediaWithTag:(NSString *)tag error:(NSError* __autoreleasing*)error;
 
 - (id) initWithJSONFragment:(NSDictionary*)json;
 

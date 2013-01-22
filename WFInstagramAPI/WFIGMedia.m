@@ -45,6 +45,24 @@
   return media;
 }
 
++ (WFIGMediaCollection*) mediaWithTag:(NSString *)tag error:(NSError* __autoreleasing*)error
+{
+    WFIGMediaCollection *media = nil;
+    NSString *url = [NSString stringWithFormat:@"/tags/%@/media/recent", tag];
+    WFIGResponse *response = [WFInstagramAPI get:url];
+    if ([response isSuccess]) {
+        media = [[WFIGMediaCollection alloc] initWithJSON:[response parsedBody]];
+    } else {
+        if (error) {
+            *error = [response error];
+        }
+        WFIGDLOG(@"response error: %@", [response error]);
+        WFIGDLOG(@"response body: %@", [response parsedBody]);
+    }
+    
+    return media;
+}
+
 #pragma mark - instance methods
 
 - (id) init {
