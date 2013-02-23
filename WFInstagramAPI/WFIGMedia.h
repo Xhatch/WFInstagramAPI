@@ -10,6 +10,7 @@
 
 typedef void (^WFIGMediaImageCallback)(WFIGMedia *media, UIImage *image);
 typedef void (^WFIGMediaCommentsCallback)(WFIGMedia *media, NSArray *comments, NSError *error);
+typedef void (^WFIGMediaLikesCallback)(WFIGMedia *media, NSArray *likes, NSError *error);
 
 @interface WFIGMedia : NSObject {
 }
@@ -67,15 +68,28 @@ typedef void (^WFIGMediaCommentsCallback)(WFIGMedia *media, NSArray *comments, N
  */
 - (void) allCommentsWithCompletionBlock:(WFIGMediaCommentsCallback)completionBlock;
 
+
 /**
- * array of WFIGUser instances, initially
- * generated from -likesData JSON.
- * Note that user attrs given by the API on like data are not
- * full: only a few attributes will actually be filled in.
- * You should use -[WFIGUser remoteUserWithId:error:] if you
- * require more user data.
+ * array of WFIGUser instances, initially generated from -likesData
+ * Note that this method may only return 10 likes if the media has
+ * more than 10 likes and this object was created from one of the
+ * media endpoints (the media endpoints will only return 10 likes). If you
+ * need all likes, you should first call 'loadAllLikesWithCompletion:'
  */
-- (NSMutableArray*) likeUsers;
+- (NSMutableArray *) likes;
+
+/**
+ * returns YES if all likes have been loaded. The 'likes' method
+ * may return less likes than 'likesCount', because the media endpoints
+ * only return 10 likes
+ */
+- (BOOL) hasAllLikes;
+
+/**
+ * Loads all likes asynchronously on a background thread, and calls the
+ * completion block on the main thread when the likes are loaded.
+ */
+- (void) allLikesWithCompletionBlock:(WFIGMediaLikesCallback)completionBlock;
 
 /**
  * Media methods. Variants with a completion block argument execute

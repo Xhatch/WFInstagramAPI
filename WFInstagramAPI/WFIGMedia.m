@@ -21,7 +21,8 @@
 @implementation WFIGMedia {
   NSMutableArray *_comments;
   BOOL _hasAllComments;
-  NSMutableArray *_likeUsers;
+    NSMutableArray *_likes;
+    BOOL _hasAllLikes;
 }
 
 @synthesize instagramId, imageURL, thumbnailURL, lowResolutionURL, instagramURL, createdTime,
@@ -68,6 +69,7 @@
 - (id) init {
   if ((self = [super init])) {
     _hasAllComments = NO;
+    _hasAllLikes = NO;
   }
   return self;
 }
@@ -156,17 +158,58 @@
   });
 }
 
-- (NSMutableArray*) likeUsers {
-  if (nil == _likeUsers) {
-    NSMutableArray *likeUsers = [[NSMutableArray alloc] init];
-    for (NSDictionary *userJson in self.likesData) {
-      [likeUsers addObject:[[WFIGUser alloc] initWithJSONFragment:userJson]];
+- (NSMutableArray *) likes {
+    if (nil == _likes) {
+        _likes = [NSMutableArray new];
+        for (NSDictionary *userDictionary in self.likesData) {
+            [_likes addObject:[[WFIGUser alloc] initWithJSONFragment:userDictionary]];
+        }
     }
-    _likeUsers = likeUsers;
-  }
-  return _likeUsers;
+    return _likes;
 }
 
+- (BOOL) hasAllLikes {
+    if ([[self likes] count] == [self likesCount]) _hasAllLikes = YES;
+    return _hasAllLikes;
+}
+
+- (void) allLikesWithCompletionBlock:(WFIGMediaCommentsCallback)completionBlock
+{
+    __block WFIGMedia *blockSelf = self;
+    
+    if ([self hasAllLikes]) {
+        completionBlock(blockSelf, _likes, nil);
+        return;
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *endpoint = [NSString stringWithFormat:@"/media/%@/likes", self.instagramId];
+        WFIGResponse *response = [WFInstagramAPI get:endpoint];
+        
+        dispatch_async( dispatch_get_main_queue(), ^{
+            if ([response isSuccess]) {
+                @synchronized(self) {
+                    _likes = [self likesWithJSON:[[response parsedBody] objectForKey:@"data"]];
+                    self.likesCount = [[self likes] count];
+                }
+            } else {
+                WFIGDLOG(@"response error: %@", [response error]);
+                WFIGDLOG(@"response body: %@", [response parsedBody]);
+            }
+            
+            completionBlock(blockSelf, _likes, [response error]);
+        });
+    });
+}
+
+- (NSMutableArray *)likesWithJSON:(NSArray *)json
+{
+    NSMutableArray *likes = [NSMutableArray new];
+    for (NSDictionary *likeJson in json) {
+        [likes addObject:[[WFIGUser alloc] initWithJSONFragment:likeJson]];
+    }
+    return likes;
+}
 
 #pragma mark - Media methods
 - (UIImage*) image {
