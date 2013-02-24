@@ -92,6 +92,11 @@ typedef void (^WFIGMediaLikesCallback)(WFIGMedia *media, NSArray *likes, NSError
 - (void) allLikesWithCompletionBlock:(WFIGMediaLikesCallback)completionBlock;
 
 /**
+ * Sets a like on this media by the currently authenticated user
+ */
+- (BOOL) setLikeWithError:(NSError* __autoreleasing*)error;
+
+/**
  * Media methods. Variants with a completion block argument execute
  * asynchronously on a background thread: your block will get called on the
  * main thread when the image is ready.

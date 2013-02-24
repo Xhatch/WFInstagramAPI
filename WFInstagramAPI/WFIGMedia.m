@@ -177,11 +177,6 @@
 {
     __block WFIGMedia *blockSelf = self;
     
-    if ([self hasAllLikes]) {
-        completionBlock(blockSelf, _likes, nil);
-        return;
-    }
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *endpoint = [NSString stringWithFormat:@"/media/%@/likes", self.instagramId];
         WFIGResponse *response = [WFInstagramAPI get:endpoint];
@@ -209,6 +204,19 @@
         [likes addObject:[[WFIGUser alloc] initWithJSONFragment:likeJson]];
     }
     return likes;
+}
+
+- (BOOL) setLikeWithError:(NSError* __autoreleasing*)error
+{
+    NSString *path = [NSString stringWithFormat:@"/media/%@/likes",
+                      self.instagramId];
+    WFIGResponse *response = [WFInstagramAPI post:nil to:path];
+    
+    if ([response isError]) {
+        *error = [response error];
+    }
+    
+    return [response isSuccess];
 }
 
 #pragma mark - Media methods
