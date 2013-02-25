@@ -219,6 +219,19 @@
     return [response isSuccess];
 }
 
+- (BOOL) removeLikeWithError:(NSError* __autoreleasing*)error
+{
+    NSString *path = [NSString stringWithFormat:@"/media/%@/likes",
+                      self.instagramId];
+    WFIGResponse *response = [WFInstagramAPI delete:path];
+    
+    if ([response isError]) {
+        *error = [response error];
+    }
+    
+    return [response isSuccess];
+}
+
 #pragma mark - Media methods
 - (UIImage*) image {
   return [WFIGImageCache getImageAtURL:self.imageURL];
