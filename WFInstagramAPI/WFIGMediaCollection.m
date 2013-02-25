@@ -33,6 +33,23 @@
   return self;
 }
 
+- (id) initWithJSON:(NSDictionary*)json limit:(int)limit {
+    if ((self = [self init])) {
+        // the core objects
+        _media = [NSMutableArray array];
+        NSArray *dataChunks = [json objectForKey:@"data"];
+        for (int i = 0; i < limit; i++) {
+            NSDictionary *mediaJSON = dataChunks[i];
+            [_media addObject:[[WFIGMedia alloc] initWithJSONFragment:mediaJSON]];
+        }
+        
+        //pagination metadata
+        NSDictionary *pagination = [json objectForKey:@"pagination"];
+        self.nextPageURL = [pagination objectForKey:@"next_url"];
+    }
+    return self;
+}
+
 - (BOOL) hasNextPage {
   return  (nil != self.nextPageURL);
 }

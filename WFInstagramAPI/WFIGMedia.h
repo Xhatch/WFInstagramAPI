@@ -31,6 +31,7 @@ typedef void (^WFIGMediaLikesCallback)(WFIGMedia *media, NSArray *likes, NSError
 @property (strong, nonatomic) NSDictionary *locationData;
 
 + (WFIGMediaCollection*) popularMediaWithError:(NSError* __autoreleasing*)error;
++ (WFIGMediaCollection*) popularMediaWithLimit:(int)limit error:(NSError* __autoreleasing*)error;
 + (WFIGMediaCollection*) mediaWithTag:(NSString *)tag error:(NSError* __autoreleasing*)error;
 
 - (id) initWithJSONFragment:(NSDictionary*)json;

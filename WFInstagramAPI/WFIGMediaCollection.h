@@ -11,6 +11,7 @@
 @property (strong, nonatomic) NSString *nextPageURL;
 
 - (id) initWithJSON:(NSDictionary*)json;
+- (id) initWithJSON:(NSDictionary*)json limit:(int)limit;
 
 - (BOOL) hasNextPage;
 - (WFIGMediaCollection*) nextPageWithError:(NSError* __autoreleasing *)error;

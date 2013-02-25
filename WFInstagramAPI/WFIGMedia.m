@@ -46,6 +46,22 @@
   return media;
 }
 
++ (WFIGMediaCollection*) popularMediaWithLimit:(int)limit error:(NSError* __autoreleasing*)error {
+    WFIGMediaCollection *media = nil;
+    WFIGResponse *response = [WFInstagramAPI get:@"/media/popular"];
+    if ([response isSuccess]) {
+        media = [[WFIGMediaCollection alloc] initWithJSON:[response parsedBody] limit:limit];
+    } else {
+        if (error) {
+            *error = [response error];
+        }
+        WFIGDLOG(@"response error: %@", [response error]);
+        WFIGDLOG(@"response body: %@", [response parsedBody]);
+    }
+    
+    return media;
+}
+
 + (WFIGMediaCollection*) mediaWithTag:(NSString *)tag error:(NSError* __autoreleasing*)error
 {
     WFIGMediaCollection *media = nil;
