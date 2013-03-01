@@ -141,7 +141,7 @@
 }
 
 - (BOOL) hasAllComments {
-  if ([[self comments] count] == [self commentsCount]) _hasAllComments = YES;
+  if ([[self comments] count] >= [self commentsCount]) _hasAllComments = YES;
   return _hasAllComments;
 }
 
@@ -185,7 +185,7 @@
 }
 
 - (BOOL) hasAllLikes {
-    if ([[self likes] count] == [self likesCount]) _hasAllLikes = YES;
+    if ([[self likes] count] >= [self likesCount]) _hasAllLikes = YES;
     return _hasAllLikes;
 }
 
@@ -232,6 +232,10 @@
         *error = [response error];
     }
     
+    if (! [response isError] && [response isSuccess]) {
+        self.likesCount++;
+    }
+    
     return [response isSuccess];
 }
 
@@ -243,6 +247,10 @@
     
     if ([response isError]) {
         *error = [response error];
+    }
+    
+    if (! [response isError] && [response isSuccess]) {
+        self.likesCount--;
     }
     
     return [response isSuccess];
