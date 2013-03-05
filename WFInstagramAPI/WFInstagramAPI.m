@@ -65,6 +65,7 @@ UIWindow *g_authWindow = nil;
 
 + (void) setAccessToken:(NSString*)accessToken {
   g_instagramAccessToken = accessToken;
+  if (! accessToken) g_instagramCurrentUser = nil;
 }
 
 + (NSString*) accessToken {
