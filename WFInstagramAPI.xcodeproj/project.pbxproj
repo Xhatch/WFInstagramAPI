@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2384E68316F8C99800299FA8 /* WFIGRelationship.h in Headers */ = {isa = PBXBuildFile; fileRef = 2384E68116F8C99700299FA8 /* WFIGRelationship.h */; };
+		2384E68416F8C99800299FA8 /* WFIGRelationship.m in Sources */ = {isa = PBXBuildFile; fileRef = 2384E68216F8C99800299FA8 /* WFIGRelationship.m */; };
 		BE13846814E5B6DF00C6F915 /* WFIGComment.h in Headers */ = {isa = PBXBuildFile; fileRef = BE13846614E5B6DF00C6F915 /* WFIGComment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE13846914E5B6DF00C6F915 /* WFIGComment.m in Sources */ = {isa = PBXBuildFile; fileRef = BE13846714E5B6DF00C6F915 /* WFIGComment.m */; };
 		BE18925514C20A300085A01E /* WFIGDefaultSerializerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BE18925414C20A300085A01E /* WFIGDefaultSerializerTest.m */; };
@@ -63,6 +65,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2384E68116F8C99700299FA8 /* WFIGRelationship.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFIGRelationship.h; sourceTree = "<group>"; };
+		2384E68216F8C99800299FA8 /* WFIGRelationship.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFIGRelationship.m; sourceTree = "<group>"; };
 		BE13846614E5B6DF00C6F915 /* WFIGComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFIGComment.h; sourceTree = "<group>"; };
 		BE13846714E5B6DF00C6F915 /* WFIGComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WFIGComment.m; sourceTree = "<group>"; };
 		BE18925314C20A300085A01E /* WFIGDefaultSerializerTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WFIGDefaultSerializerTest.h; sourceTree = "<group>"; };
@@ -266,6 +270,8 @@
 				BE88E28214C1271B006910C5 /* WFIGUser.m */,
 				BE13846614E5B6DF00C6F915 /* WFIGComment.h */,
 				BE13846714E5B6DF00C6F915 /* WFIGComment.m */,
+				2384E68116F8C99700299FA8 /* WFIGRelationship.h */,
+				2384E68216F8C99800299FA8 /* WFIGRelationship.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -301,6 +307,7 @@
 				BE88E2AB14C12725006910C5 /* WFIGUser.h in Headers */,
 				BE88E2AD14C12725006910C5 /* WFInstagramAPI.h in Headers */,
 				BE13846814E5B6DF00C6F915 /* WFIGComment.h in Headers */,
+				2384E68316F8C99800299FA8 /* WFIGRelationship.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +422,7 @@
 				BE88E28F14C1271B006910C5 /* WFInstagramAPI.m in Sources */,
 				BE88E2A314C12725006910C5 /* WFIGConnectionDelegate.m in Sources */,
 				BE13846914E5B6DF00C6F915 /* WFIGComment.m in Sources */,
+				2384E68416F8C99800299FA8 /* WFIGRelationship.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
